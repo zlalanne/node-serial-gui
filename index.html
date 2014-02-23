@@ -45,13 +45,13 @@
     <script src="assets/flot/jquery.flot.resize.js"></script>
     <script type="text/javascript">
 
-    $(function() {
+        $(function() {
 
         // We use an inline data source in the example, usually data would
         // be fetched from a server
 
         var data = [],
-            totalPoints = 300;
+        totalPoints = 300;
 
         var updateInterval = 30;
 
@@ -64,7 +64,7 @@
             while (data.length < totalPoints) {
 
                 var prev = data.length > 0 ? data[data.length - 1] : 50,
-                    y = prev + Math.random() * 10 - 5;
+                y = prev + Math.random() * 10 - 5;
 
                 if (y < 0) {
                     y = 0;
@@ -114,10 +114,20 @@
             $("#formData").html(html);
         });
 
+        var SerialPort = require("serialport").SerialPort;
         $("#serialForm").submit(function(event) {
-              port = $("#formData").val();
-              event.preventDefault();
-        });
+          portNum = $("#formData").val();
+          var port = new SerialPort(portNum, {
+            baudrate: 9600
+          });
+          port.on("open", function() {
+            console.log('open');
+            port.on('data', function(data) {
+                console.log("data received: " + data);
+            });
+          });
+          event.preventDefault();
+      });
     </script>
 </body>
 </html>
