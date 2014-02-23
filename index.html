@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>Hello World!</title>
+</head>
+<body>
+</body>
+<script>
+var serialPort = require("serialport");
+serialPort.list(function (err, ports) {
+  ports.forEach(function(port) {
+    document.write(port.comName);
+    document.write(port.pnpId);
+    document.write(port.manufacturer);
+  });
+});
+</script>
+</html>
