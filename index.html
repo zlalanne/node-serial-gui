@@ -1,17 +1,60 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Hello World!</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MSP430 GUI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
+
 <body>
+    <div class="container">
+        <h1>Choose Serial Port</h1>
+        <form class="form" id="serialForm">
+            <div class="form-group">
+                <div class="col-md-6">
+                    <select class="form-control" id="formData">
+                        <option class="form-control" value="one">One</option>
+                        <option class="form-control" value="two">Two</option>
+                        <option class="form-control" value="three">Three</option>
+                        <option class="form-control" value="four">Four</option>
+                        <option class="form-control" value="five">Five</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">Connect</button>
+            </div>
+        </form>
+        <h1>Incoming Data</h1>
+    </div>
+    <script src="assets/jquery/dist/jquery.min.js"></script>
+    <script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        // Getting the COM ports available
+        var serialPort = require("serialport");
+        serialPort.list(function (err, ports) {
+            var html = "";
+            ports.forEach(function(port) {
+                html += "<option value=\"" + port.comName + "\">" + port.comName +"</option>\n";
+            });
+            $("#formData").html(html);
+        });
+
+        $("#serialForm").submit(function(event) {
+              port = $("#formData").val();
+              event.preventDefault();
+        });
+    </script>
 </body>
-<script>
-var serialPort = require("serialport");
-serialPort.list(function (err, ports) {
-  ports.forEach(function(port) {
-    document.write(port.comName);
-    document.write(port.pnpId);
-    document.write(port.manufacturer);
-  });
-});
-</script>
 </html>
