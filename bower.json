@@ -1,0 +1,17 @@
+{
+  "name": "msp-node-gui",
+  "version": "0.0.1",
+  "authors": [
+    "Zack Lalanne <zack.lalanne@ti.com>"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1"
+  }
+}
