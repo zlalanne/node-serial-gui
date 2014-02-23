@@ -43,66 +43,65 @@
     <script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="assets/flot/jquery.flot.js"></script>
     <script src="assets/flot/jquery.flot.resize.js"></script>
+    <script src="assets/flot/jquery.flot.time.js"></script>
     <script type="text/javascript">
 
-        $(function() {
+        var graph = function(port) {
 
-        // We use an inline data source in the example, usually data would
-        // be fetched from a server
+        var data = [];
+        var data_counter = 0;
+        var time_len = 10000;
+        var update_interval = 40;
+        var data_len = parseInt(time_len / update_interval);
+        var last_data_point = 0;
 
-        var data = [],
-        totalPoints = 300;
+        var no_data = true;
+        var stop_timer = false;
 
-        var updateInterval = 30;
-
-        function getRandomData() {
-
-            if (data.length > 0)
-                data = data.slice(1);
-
-            // Do a random walk
-            while (data.length < totalPoints) {
-
-                var prev = data.length > 0 ? data[data.length - 1] : 50,
-                y = prev + Math.random() * 10 - 5;
-
-                if (y < 0) {
-                    y = 0;
-                } else if (y > 100) {
-                    y = 100;
-                }
-
-                data.push(y);
-            }
-
-            // Zip the generated y values with the x values
-            var res = [];
-            for (var i = 0; i < data.length; ++i) {
-                res.push([i, data[i]])
-            }
-
-            return res;
-        }
-
-        var plot = $.plot("#graph", [ ],{
+        var options = {
             series: {
-                shadowSize: 0   // Drawing is faster without shadows
+                shadowSize: 0 // Drawing is faster without shadows
             },
             xaxis: {
-                show: false
+                mode: 'time',
+                timeformat: '%M:%S'
             },
             colors: ['#049cdb']
-        });
-
-        function update() {
-            plot.setData([getRandomData()]);
-            plot.setupGrid();
-            plot.draw();
-            setTimeout(update, updateInterval);
         }
 
-        update();
-    });
+        var plot = $.plot("#graph", [], options);
+
+        var interval = 0;
+
+        var timer = function() {
+            if(stop_timer) {
+                clearInterval(interval);
+                return;
+            }
+
+            var t = Date.now();
+            if(data.length >= data_len) {
+                data = data.slice(1);
+            }
+
+            data.push([t, last_data_point]);
+            plot.setData([data]);
+            plot.setupGrid();
+            plot.draw();
+        };
+
+        port.on('data', function(data) {
+            last_data_point = data;
+            if(no_data) {
+                no_data = false;
+                timer();
+                interval = setInterval(function() {
+                    timer();
+                }, update_interval);
+            }
+            console.log("data received: " + data);
+        });
+    };
 
         // Getting the COM ports available
         var serialPort = require("serialport");
@@ -122,10 +121,9 @@
           });
           port.on("open", function() {
             console.log('open');
-            port.on('data', function(data) {
-                console.log("data received: " + data);
-            });
+            graph(port);
           });
+          console.log("Got here");
           event.preventDefault();
       });
     </script>
