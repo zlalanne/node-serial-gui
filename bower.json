@@ -1,9 +1,5 @@
 {
-  "name": "msp-node-gui",
-  "version": "0.0.1",
-  "authors": [
-    "Zack Lalanne <zack.lalanne@ti.com>"
-  ],
+  "name": "node-serial-gui",
   "ignore": [
     "**/.*",
     "node_modules",
