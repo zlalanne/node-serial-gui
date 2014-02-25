@@ -9,3 +9,6 @@ Includes simple Energia sketch to send random data from a LaunchPad to the GUI o
 * node-webkit
 * flot
 * bootstrap
+
+### Screenshot
+![Screenshot](screenshot.png)
