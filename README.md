@@ -30,7 +30,9 @@ To make a working stand-alone application from the code in this repository, you 
 	```
 	*Replace your_nodewebkit_version_number with the proper number - for instance, 0.9.2*.
 * Run grunt to build the executable  
-	```grunt```
+	```
+	grunt
+	```
 
 
 ### Screenshot
