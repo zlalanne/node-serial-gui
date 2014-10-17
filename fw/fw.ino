@@ -8,7 +8,7 @@ void setup() {
 
 void loop() { 
   LastValue += random(-5, 5);
-  if(LastValue == 100) {
+  if(LastValue > 100) {
     LastValue = 100;
   } else if(LastValue <0) {
     LastValue = 0;
